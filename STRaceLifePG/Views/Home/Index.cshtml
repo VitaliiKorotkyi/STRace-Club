@@ -1,0 +1,77 @@
+﻿@model STRaceLifePG.ViewModel.ClubListViewModel
+
+@{
+    ViewData["Title"] = "Clubs";
+    var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value) : (Guid?)null;
+}
+
+<h1>Clubs</h1>
+
+<div class="row">
+    @foreach (var club in Model.Clubs.Select((club, index) => new { club, index }))
+    {
+        if (club.index > 0 && club.index % 3 == 0)
+        {
+            <div class="col-12">
+                <hr />
+            </div>
+        }
+
+        <div class="col-md-4">
+            <div class="card shadow-sm @((userId.HasValue && club.club.Club.UserId == userId) ? "neon-yellow-border" : "")">
+                @if (!string.IsNullOrEmpty(club.club.Club.ImageUrl))
+                {
+                    <img src="@club.club.Club.ImageUrl" width="100%" height="225" class="bd-placeholder-img card-img-top" alt="@club.club.Club.Title" />
+                }
+                else
+                {
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c" />
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+                    </svg>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@club.club.Club.Title</h5>
+                    <p class="card-text">@club.club.Club.Description</p>
+                    <p class="card-text"><small class="text-muted">Owner: @club.club.Club.User?.Name</small></p>
+                    <p class="card-text"><small class="text-muted">Likes: @club.club.LikeCount</small></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a asp-area="" asp-controller="Club" asp-action="Detail" asp-route-id="@club.club.Club.ClubId" type="button" class="btn btn-sm btn-outline-secondary">Detail</a>
+                            @if (userId.HasValue && club.club.Club.UserId == userId)
+                            {
+                                <a asp-area="" asp-controller="Race" asp-action="Create" asp-route-clubId="@club.club.Club.ClubId" class="btn btn-sm btn-outline-secondary">Create New Race</a>
+                                <a type="button" asp-controller="Club" asp-action="Edit" asp-route-id="@club.club.Club.ClubId" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            }
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<hr />
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+            </li>
+        }
+    </ul>
+</nav>

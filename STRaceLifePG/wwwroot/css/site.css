@@ -1,0 +1,132 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+/*стили для .зера*/
+.user-icon {
+    display: flex;
+    align-items: center;
+}
+
+    .user-icon img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+.online-status {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+/*фиксированая кнопка Create new Club*/
+.fixed-button {
+    position: fixed;
+    bottom: 680px;
+    right: 20px;
+    z-index: 1000;
+}
+/*подсветка для карточуи владельца клуба*/
+.neon-yellow-border {
+    border: 2px solid #ffeb3b;
+    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b, 0 0 30px #ffeb3b, 0 0 40px #ffeb3b;
+}
+/*стрелочки для гонок*/
+.race-container {
+    position: relative;
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.2); /* Белый цвет с прозрачностью */
+    color: white;
+    border: none;
+    z-index: 1000;
+    cursor: pointer;
+    height: 835px; /* Height of two race cards */
+    width: 15px;
+    border-radius: 0;
+    backdrop-filter: blur(5px); /* Эффект размытия */
+    -webkit-backdrop-filter: blur(5px); /* Поддержка для Safari */
+}
+
+
+    .prev-btn {
+    left: -23px; /* Adjust position as needed */
+}
+
+.next-btn {
+    right: -23px; /* Adjust position as needed */
+}
+/*какрта для удаления race*/
+.delete-race-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.delete-race-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 550px;
+}
+
+.delete-race-card-body {
+    padding: 20px;
+}
+/*какрта для удаления klub*/
+.delete-club-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.delete-club-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 550px;
+}
+
+.delete-club-card-body {
+    padding: 20px;
+}
+
+/*форма регистра*/
+.d-flex-register {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh;
+}
+
+.register-card-register {
+    width: 550px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}

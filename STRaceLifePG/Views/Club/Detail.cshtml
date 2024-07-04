@@ -1,0 +1,104 @@
+﻿@model STRaceLifePG.Models.Club
+
+@{
+    var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value) : (Guid?)null;
+}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-3">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img class="card-img-top" src="@Model.ImageUrl" alt="Club Image" />
+            }
+            else
+            {
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Club Image" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c" />
+                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Club Image</text>
+                </svg>
+            }
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>
+                <p class="card-text">@Model.Description</p>
+                <p class="card-text"><strong>Likes:</strong> <span id="likeCount">@Model.LikeCount</span></p> <!-- Отображение количества лайков -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class=" btn btn-sm btn-outline-secondary" onclick="likeClub('@Model.ClubId')">Like</a>
+
+                }
+                @if (userId.HasValue && Model.UserId == userId.Value)
+                {
+                    <a href="@Url.Action("Delete", "Club", new { id = Model.ClubId })" class="btn btn-sm btn-outline-danger">Delete</a>
+                }
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Owner Information</h5>
+                <p class="card-text"><strong>Name:</strong> @Model.User.Name</p>
+                <p class="card-text"><strong>Email:</strong> @Model.User.Email</p>
+                <p class="card-text"><strong>Location:</strong> @Model.User.Location</p>
+                <li class="nav-item user-icon">
+                    <p class="card-text">
+                        <strong>Email:</strong>
+                        <a href="mailto:@Model.User.Email"><img src="~/Icon/message.png" alt="User" /></a>
+                    </p>
+                </li>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="row">
+            @foreach (var race in Model.Races)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        @if (!string.IsNullOrEmpty(race.ImageUrl))
+                        {
+                            <img class="card-img-top" src="@race.ImageUrl" alt="Race Image" />
+                        }
+                        else
+                        {
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c" />
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+                            </svg>
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@race.Description</h5>
+                            <p class="card-text"><strong>Category:</strong> @race.Category</p>
+                            <p class="card-text"><strong>Owner:</strong> @race.User.Name</p>
+                            <a href="@Url.Action("Detail", "Race", new { id = race.RaceId })" class="btn btn-sm btn-outline-secondary">View</a>
+                            @if (userId.HasValue && race.UserId == userId.Value)
+                            {
+                                <a href="@Url.Action("Edit", "Race", new { raceId = race.RaceId })" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="@Url.Action("Delete", "Race", new { id = race.RaceId })" class="btn btn-sm btn-outline-danger">Delete</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function likeClub(clubId) {
+        fetch(`/Club/Like?clubId=${clubId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        }).then(response => response.json())
+            .then(data => {
+                document.getElementById('likeCount').textContent = data.likeCount;
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong.');
+            });
+    }
+</script>

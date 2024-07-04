@@ -1,0 +1,30 @@
+﻿@model STRaceLifePG.ViewModel.EditClubViewModel
+<h2 class="text-center">Edit Club</h2>
+
+<div class="d-flex justify-content-center">
+    <div class="card" style="width: 550px;">
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Image" class="control-label"></label>
+                    <input asp-for="Image" type="file" class="form-control" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="Id" />
+                <hr />
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-controller="Club"  asp-action="Detail" asp-route-id="@Model.Id" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

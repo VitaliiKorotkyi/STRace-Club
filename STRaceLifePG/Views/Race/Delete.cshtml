@@ -1,0 +1,42 @@
+﻿@model STRaceLifePG.Models.Race
+
+
+
+<div class="delete-race-container">
+
+    <div class="card delete-race-card mb-3">
+        <h2 class="text-center">Delete Race</h2>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" class="card-img-top" alt="Race Image" style="height: 200px; object-fit: cover;">
+        }
+        else
+        {
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c"></rect>
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+            </svg>
+        }
+        <div class="card-body delete-race-card-body">
+            <h3>Are you sure you want to delete this race?</h3>
+            <div>
+                <h4>@Model.Description</h4>
+                <dl class="dl-horizontal">
+                    <dt>Category</dt>
+                    <dd>@Model.Category</dd>
+                    <dt>Location</dt>
+                    <dd>@Model.City, @Model.Street, @Model.Capital</dd>
+                    <dt>Start Date</dt>
+                    <dd>@Model.StartDate</dd>
+                </dl>
+
+                <form asp-action="DeleteRace" method="post">
+                    <input type="hidden" asp-for="RaceId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

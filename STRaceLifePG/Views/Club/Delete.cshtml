@@ -1,0 +1,49 @@
+﻿@model STRaceLifePG.Models.Club
+<div class="delete-club-container">
+    <div class="card delete-club-card mb-3">
+        <h2 class="text-center">Delete Club</h2>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" class="card-img-top" alt="Club Image" style="height: 200px; object-fit: cover;">
+        }
+        else
+        {
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c"></rect>
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+            </svg>
+        }
+        <div class="card-body delete-race-card-body">
+            <h5 style="color: red">Are you sure you want to delete this club?</h5>
+            <hr/>
+            <div>
+                <p>Club title: @Model.Title</p>
+                <hr />
+                <dl class="dl-horizontal">
+                    <p>Description: @Model.Description</p>
+                    <p>Club ID: @Model.ClubId</p>
+                    <p>User ID: @Model.UserId</p>
+                    <hr />
+                    <h6>Races</h6>
+                    @foreach (var race in Model.Races)
+                    {
+                        <div>
+                            <p>Race ID: @race.RaceId</p>
+                            <p>Category: @race.Category</p>
+                            <p>Location: @race.City, @race.Street, @race.Capital</p>
+                            <p>Start Date: @race.StartDate</p>
+                            <hr />
+                        </div>
+                    }
+                </dl>
+
+                <form asp-action="DeleteClub" method="post">
+                    <input type="hidden" asp-for="ClubId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

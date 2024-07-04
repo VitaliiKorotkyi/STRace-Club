@@ -1,0 +1,123 @@
+﻿@model STRaceLifePG.ViewModel.RaceListViewModel
+
+@{
+    ViewData["Title"] = "Races";
+    var userId = User.Identity.IsAuthenticated ? Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value) : (Guid?)null;
+}
+
+<h1>All Races</h1>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    @foreach (var race in Model.Races)
+    {
+        <div class="col">
+            <div class="card shadow-sm">
+                @if (!string.IsNullOrEmpty(race.Race.ImageUrl))
+                {
+                    <img src="@race.Race.ImageUrl" class="bd-placeholder-img card-img-top" width="100%" height="225" alt="Race Image" />
+                }
+                else
+                {
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c" />
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+                    </svg>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@race.Race.Description</h5>
+                    <p class="card-text"><strong>Category:</strong> @race.Race.Category</p>
+                    <p class="card-text"><strong>Location:</strong> @race.Race.City, @race.Race.Street, @race.Race.Capital</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a href="@Url.Action("Detail", "Race", new { id = race.Race.RaceId })" class="btn btn-sm btn-outline-secondary">View</a>
+                            @if (userId.HasValue && race.Race.UserId == userId)
+                            {
+                                <a href="@Url.Action("Edit", "Race", new { raceId = race.Race.RaceId })" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            }
+                        </div>
+                        <small class="text-body-secondary">
+                            <h6>
+                                Race start:
+                                @{
+                                    var now = DateTime.Now;
+                                    if (race.Race.StartDate < now)
+                                    {
+                                        if ((now - race.Race.StartDate).TotalHours >= 5)
+                                        {
+                                            @: Finished
+                                        }
+                                        else
+                                        {
+                                            @: Race started
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="countdown" data-startdate="@race.Race.StartDate.ToString("o")"></span>
+                                    }
+                                }
+                            </h6>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<hr />
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countdownElements = document.querySelectorAll('.countdown');
+        countdownElements.forEach(el => {
+            const startDate = new Date(el.dataset.startdate);
+            updateCountdown(el, startDate);
+            setInterval(() => updateCountdown(el, startDate), 1000);
+        });
+
+        function updateCountdown(el, startDate) {
+            const now = new Date();
+            const distance = startDate - now;
+
+            if (distance < 0) {
+                const hoursElapsed = Math.abs(Math.floor(distance / (1000 * 60 * 60)));
+                if (hoursElapsed >= 5) {
+                    el.textContent = 'Finished';
+                } else {
+                    el.textContent = 'Race started';
+                }
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                el.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+        }
+    });
+</script>

@@ -1,0 +1,48 @@
+# игнорирование системных файлов
+.DS_Store
+Thumbs.db
+
+# игнорирование выходных папок
+bin/
+obj/
+
+# игнорирование настроек среды разработки
+.vscode/
+.idea/
+.vs/
+
+# игнорирование логов, временных файлов и кэшей
+*.log
+*.tmp
+*.swp
+
+# игнорирование файлов сборки
+*.dll
+*.exe
+*.so
+*.dylib
+*.class
+*.pyc
+
+# игнорирование файлов конфигурации
+appsettings.Development.json
+appsettings.json
+
+# игнорирование файлов пользователя
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# игнорирование любых других личных данных
+# Ignore Visual Studio temporary files, build results, and
+# user-generated files
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.pidb
+.vs/
